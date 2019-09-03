@@ -5,61 +5,93 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     Rigidbody2D _rigid;
-
     [SerializeField]
     private float jumpForce = 5.0f;
-
     [SerializeField]
-    private bool isGrounded = false;
-
-    private bool resetJump = false;
-
-
+    private float _playerSpeed = 10f;
+    private bool _resetJump = false;
+    private PlayerAnimation _playerAnim;
+    private SpriteRenderer _playerSprite;
+    private bool _grounded = false;
+    
 
     void Start()
     {
-        _rigid = GetComponent<Rigidbody2D>();    
+        _rigid = GetComponent<Rigidbody2D>();
+        _playerAnim = GetComponent<PlayerAnimation>();
+        _playerSprite = GetComponentInChildren<SpriteRenderer>();
     }
 
-    
     void Update()
     {
         Move();
-        Jump();
-    } 
+    }  
 
-    private void Jump()
-    {
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
-        {
-            _rigid.velocity = new Vector2(_rigid.velocity.x, jumpForce);
-            isGrounded = false;
-            resetJump = true;
-            StartCoroutine(ResetJumpTime()); 
-        }
-
-       RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, 0.8f, 1 << 8);
-       Debug.DrawRay(transform.position, Vector2.down * 0.8f, Color.green);
-
-       if(hitInfo.collider != null) 
-       {
-           if(resetJump == false)
-            {
-                isGrounded = true;
-            }
-           
-       }
-    }
-
-    IEnumerator ResetJumpTime()
-    {
-        yield return new WaitForSeconds(0.1f);
-        resetJump = false;
-    }
-
-    private void Move()
+    private void Move()   
     {
         float move = Input.GetAxisRaw("Horizontal");
-        _rigid.velocity = new Vector2(move, _rigid.velocity.y);
+        _grounded = IsGrounded();
+        if(move > 0)
+        {
+            Flip(true);
+
+        } 
+        else if (move < 0)
+        {
+            Flip(false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded() == true)
+        {
+            Debug.Log("Jump"); 
+            _rigid.velocity = new Vector2(_rigid.velocity.x, jumpForce);
+            StartCoroutine(ResetJumpRoutine());
+            _playerAnim.Jump(true);
+            
+        }
+
+        _rigid.velocity = new Vector2(move * _playerSpeed, _rigid.velocity.y);
+
+        _playerAnim.Move(move);
     }
+
+    bool IsGrounded()
+    {
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, 0.8f, 1 << 8);
+        Debug.DrawRay(transform.position, Vector2.down, Color.green);
+         if (hitInfo.collider != null) 
+         {
+             if(_resetJump == false) 
+             {
+                _playerAnim.Jump(false);
+                return true;
+             }
+             
+         }
+
+         return false;
+    }
+
+    IEnumerator ResetJumpRoutine() 
+    {
+        _resetJump = true;
+        yield return new WaitForSeconds(0.1f);
+        _resetJump = false;
+    }
+
+    void Flip(bool facingRight)
+    {
+       if(facingRight == true)
+       {
+           transform.localScale = new Vector3(1,1,1);
+          // _playerSprite.flipX = false; 
+       }
+       else if(facingRight == false)
+       {
+           transform.localScale = new Vector3(-1,1,1); 
+           // _playerSprite.flipX = true;
+
+       } 
+    }
+
 }
