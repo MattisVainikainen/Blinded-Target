@@ -46,8 +46,7 @@ public class Player : MonoBehaviour
         }
 
         if(Input.GetKeyDown(KeyCode.Space) && IsGrounded() == true)
-        {
-            Debug.Log("Jump"); 
+        { 
             _rigid.velocity = new Vector2(_rigid.velocity.x, jumpForce);
             StartCoroutine(ResetJumpRoutine());
             _playerAnim.Jump(true);
