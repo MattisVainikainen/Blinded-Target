@@ -5,14 +5,58 @@ using UnityEngine;
 public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] protected int health;
-    [SerializeField] protected int speed;
+    [SerializeField] protected float speed;
     [SerializeField] protected int gems;
     [SerializeField] protected Transform pointA, pointB;
 
-    public virtual void Attack()
+    protected Vector3 currentTarget;
+    protected Animator anim;
+    protected SpriteRenderer sprite;
+
+    public virtual void Init()
     {
-        Debug.Log("BaseAttack Called"); 
+        anim = GetComponentInChildren<Animator>();
+        sprite = GetComponentInChildren<SpriteRenderer>();
     }
 
-    public abstract void Update();  
+    private void Start() 
+    {
+        Init(); 
+    }
+
+    public virtual void Update()
+    {
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("idle"))
+        {
+            return;
+        }
+        MoveMent();
+    }
+
+    public virtual void MoveMent()
+    {
+            if (currentTarget == pointA.position)
+            {
+                sprite.flipX = true;
+            }
+            else
+            {
+                sprite.flipX = false;
+            }
+
+            if (transform.position == pointA.position)
+            {
+                currentTarget = pointB.position;
+                anim.SetTrigger("idle");
+            }
+            else if (transform.position == pointB.position)
+            {
+                currentTarget = pointA.position;
+                anim.SetTrigger("idle");
+            }
+
+            transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
+    }
+
+    
 }
