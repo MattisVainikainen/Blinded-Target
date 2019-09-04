@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable
 {
     Rigidbody2D _rigid;
     [SerializeField]
@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     private PlayerAnimation _playerAnim;
     private SpriteRenderer _playerSprite;
     private bool _grounded = false;
+    public int Health { get; set; }
     
 
     void Start()
@@ -95,6 +96,11 @@ public class Player : MonoBehaviour
            // _playerSprite.flipX = true;
 
        } 
+    }
+
+    public void Damage()
+    {
+        Debug.Log("Damage was called");
     }
 
 }

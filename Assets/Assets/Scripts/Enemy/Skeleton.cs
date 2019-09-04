@@ -12,8 +12,23 @@ public class Skeleton : Enemy, IDamageable
         Health = base.health;
     }
 
-    
-    public void Damage() 
+    public override void MoveMent()
+    {
+        base.MoveMent();
+        float distance = Vector3.Distance(player.transform.localPosition, transform.localPosition);
+
+        Vector3 direction = player.transform.localPosition - transform.localPosition;
+        if(direction.x > 0 && anim.GetBool("inCombat") == true)
+        {
+            transform.localScale = new Vector3(3, 3, 3);
+        }
+        else if (direction.x < 0 && anim.GetBool("inCombat") == true)
+        {
+            transform.localScale = new Vector3(-3, 3, 3);
+        }
+    }
+
+    public void Damage()
     {
        Health -= 1;
        anim.SetTrigger("hit");
