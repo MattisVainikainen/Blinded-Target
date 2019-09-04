@@ -31,21 +31,6 @@ public class MossGiant : Enemy, IDamageable
 
     public void Damage()
     {
-        Health -= 1;
-        anim.SetTrigger("hit");
-        isHit = true;
-        anim.SetBool("inCombat", true);
-
-        if (Health < 1)
-        {
-            anim.SetTrigger("death");
-            StartCoroutine(DeathTime());
-        }
-    }
-
-    IEnumerator DeathTime()
-    {
-        yield return new WaitForSeconds(4f);
-        Destroy(this.gameObject);
+       
     }
 }
