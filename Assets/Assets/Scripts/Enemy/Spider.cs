@@ -20,13 +20,16 @@ public class Spider : Enemy, IDamageable
 
     public void Damage() 
     {
-        Health -= 1;
-        if(Health < 1 && isDead == false)
+        if(isDead == false)
         {
+            Health -= 1;
+            if(Health < 1 && isDead == false)
+            {
             
             anim.SetTrigger("death");
             isDead = true;
-            Destroy(this.gameObject, 1.5f);
+            
+            }
         }
     }
 

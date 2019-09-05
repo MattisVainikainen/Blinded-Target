@@ -5,7 +5,6 @@ using UnityEngine;
 public class Skeleton : Enemy, IDamageable
 {
     public int Health { get; set; }
-
     public override void Init()
     {
         base.Init();
@@ -32,18 +31,19 @@ public class Skeleton : Enemy, IDamageable
 
     public void Damage()
     {
-       Health -= 1;
-       anim.SetTrigger("hit");
-       isHit = true;
-       anim.SetBool("inCombat", true);
+        if (isDead == false)
+        {
+            Health -= 1;
+            anim.SetTrigger("hit");
+            isHit = true;
+            anim.SetBool("inCombat", true);
 
-       if(Health < 1)
-       {
-           isDead = true;
-           anim.SetTrigger("death");
-           Destroy(this.gameObject, 1.5f);
-           
-       }
+            if(Health < 1)
+            {
+            isDead = true;
+            anim.SetTrigger("death");    
+            }
+        }
     }
 
     
