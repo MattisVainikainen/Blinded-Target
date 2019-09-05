@@ -37,14 +37,9 @@ public class Skeleton : Enemy, IDamageable
 
        if(Health < 1)
        {
-           anim.SetTrigger("death");
-            StartCoroutine(DeathTime());
+           Destroy(this.gameObject);
        }
     }
 
-    IEnumerator DeathTime()
-    {
-        yield return new WaitForSeconds(1.4f);
-        Destroy(this.gameObject);
-    }
+    
 }

@@ -62,15 +62,16 @@ public abstract class Enemy : MonoBehaviour
 
             if(isHit == false)
             {
-            transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
+            transform.localPosition = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
+            
             }
 
         float distance = Vector3.Distance(transform.localPosition, player.transform.localPosition);
 
-        if(distance > 2.0f) 
+        if(distance > 2.0f)  
         {
             isHit = false;
-            anim.SetBool("inCombat", false); 
+            anim.SetBool("inCombat", false);
         }  
     }  
 }
