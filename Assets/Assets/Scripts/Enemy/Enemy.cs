@@ -12,6 +12,7 @@ public abstract class Enemy : MonoBehaviour
     protected Vector3 currentTarget;
     protected Animator anim;
     protected SpriteRenderer sprite;
+    protected bool isDead = false;
 
     protected bool isHit = false;
 
@@ -29,18 +30,19 @@ public abstract class Enemy : MonoBehaviour
         Init(); 
     }
 
-    public virtual void Update()
+    public virtual void Update() 
     {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("idle") && anim.GetBool("inCombat") == false)
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("idle") && anim.GetBool("inCombat") == false || isDead == true)
         {
             return;
         }
+   
         MoveMent();
     }
 
     public virtual void MoveMent()
     {
-            if (currentTarget == pointA.position)
+            if (currentTarget == pointA.position && isDead == false)
             {
                 sprite.flipX = true;
             }
@@ -49,12 +51,12 @@ public abstract class Enemy : MonoBehaviour
                 sprite.flipX = false;
             }
 
-            if (transform.position == pointA.position)
+            if (transform.position == pointA.position && isDead == false)
             {
                 currentTarget = pointB.position;
                 anim.SetTrigger("idle");
             }
-            else if (transform.position == pointB.position)
+            else if (transform.position == pointB.position && isDead == false)
             {
                 currentTarget = pointA.position;
                 anim.SetTrigger("idle");

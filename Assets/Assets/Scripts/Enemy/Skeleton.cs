@@ -20,11 +20,13 @@ public class Skeleton : Enemy, IDamageable
         Vector3 direction = player.transform.localPosition - transform.localPosition;
         if(direction.x > 0 && anim.GetBool("inCombat") == true)
         {
-            transform.localScale = new Vector3(3, 3, 3);
+            sprite.flipX = false;
+            //transform.localScale = new Vector3(3, 3, 3);
         }
         else if (direction.x < 0 && anim.GetBool("inCombat") == true)
         {
-            transform.localScale = new Vector3(-3, 3, 3);
+            sprite.flipX = true;
+            //transform.localScale = new Vector3(-3, 3, 3);
         }
     }
 
@@ -37,7 +39,10 @@ public class Skeleton : Enemy, IDamageable
 
        if(Health < 1)
        {
-           Destroy(this.gameObject);
+           isDead = true;
+           anim.SetTrigger("death");
+           Destroy(this.gameObject, 1.5f);
+           
        }
     }
 

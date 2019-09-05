@@ -21,12 +21,13 @@ public class MossGiant : Enemy, IDamageable
         Vector3 direction = player.transform.localPosition - transform.localPosition;
         if (direction.x > 0 && anim.GetBool("inCombat") == true)
         {
-            //sprite.flipX = false;
-            transform.localScale = new Vector3(4, 4, 4);
+            sprite.flipX = false;
+           // transform.localScale = new Vector3(4, 4, 4);
         }
         else if (direction.x < 0 && anim.GetBool("inCombat") == true)
         {
-            transform.localScale = new Vector3(-4, 4, 4); 
+            sprite.flipX = true;
+           // transform.localScale = new Vector3(-4, 4, 4); 
         }
     }
 
@@ -39,7 +40,9 @@ public class MossGiant : Enemy, IDamageable
 
         if (Health < 1)
         {
-            Destroy(this.gameObject);
+            isDead = true;
+            anim.SetTrigger("death");
+            Destroy(this.gameObject, 1.5f);
         }
     }
 }
