@@ -11,7 +11,7 @@ public class Skeleton : Enemy, IDamageable
         Health = base.health;
     }
 
-    public override void MoveMent()
+    public override void MoveMent() 
     {
         base.MoveMent();
         float distance = Vector3.Distance(player.transform.localPosition, transform.localPosition);
@@ -20,12 +20,12 @@ public class Skeleton : Enemy, IDamageable
         if(direction.x > 0 && anim.GetBool("inCombat") == true)
         {
             sprite.flipX = false;
-            //transform.localScale = new Vector3(3, 3, 3);
+            // transform.localScale = new Vector3(3, 3, 3);
         }
         else if (direction.x < 0 && anim.GetBool("inCombat") == true)
         {
             sprite.flipX = true;
-            //transform.localScale = new Vector3(-3, 3, 3);
+           // transform.localScale = new Vector3(-3, 3, 3);
         }
     }
 

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
+
 
 public class Player : MonoBehaviour, IDamageable
 {
@@ -23,20 +25,22 @@ public class Player : MonoBehaviour, IDamageable
         _rigid = GetComponent<Rigidbody2D>();
         _playerAnim = GetComponent<PlayerAnimation>();
         _playerSprite = GetComponentInChildren<SpriteRenderer>();
+        Health = 4;
     }
 
     void Update()
     {
         Move();
-        if(Input.GetMouseButtonDown(0) && IsGrounded()== true)
+        if(CrossPlatformInputManager.GetButtonDown("A_Button") && IsGrounded()== true)
         {
             _playerAnim.Attack();
         }
+        UIManager.Instance.UpdateGemCount(diamonds);
     }  
 
     private void Move()   
     {
-        float move = Input.GetAxisRaw("Horizontal");
+        float move = CrossPlatformInputManager.GetAxisRaw("Horizontal");
         _grounded = IsGrounded();
         if(move > 0)
         {
@@ -48,7 +52,7 @@ public class Player : MonoBehaviour, IDamageable
             Flip(false);
         }
 
-        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded() == true)
+        if(CrossPlatformInputManager.GetButtonDown("B_Button") && IsGrounded() == true)
         { 
             _rigid.velocity = new Vector2(_rigid.velocity.x, jumpForce);
             StartCoroutine(ResetJumpRoutine());
@@ -102,8 +106,25 @@ public class Player : MonoBehaviour, IDamageable
 
     public void Damage()
     {
-        Debug.Log("Damage was called");
-       
+        if(Health < 1)
+        {
+            return;
+        }
+        Debug.Log("TAking damage");
+        Health--;
+        UIManager.Instance.UpdateLives(Health);
+       if( Health <1)
+       {
+          _playerAnim.Death();
+       }
     }
+
+    public void AddGems(int amount)
+    {
+        diamonds += amount;
+        UIManager.Instance.UpdateGemCount(diamonds);
+    }
+
+    
 
 }
